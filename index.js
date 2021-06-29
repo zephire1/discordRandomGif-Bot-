@@ -1,23 +1,38 @@
-import Discord from 'discord.js'
-import fetch from 'node-fetch'
+import Discord from 'discord.js';
+import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+import { randomInteger } from './utils.js';
 
 const client = new Discord.Client();
-const APIKEY = "wada****11"; //Discord bot api key
-const GIPHYKEY = "dwww****ww"; //giphy api key
+const env = dotenv.config().parsed;
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-});
+}); 
 
 client.on('message', msg => {
 
-  if (msg.channel.name === 'gif') {
+  if (msg.channel.name === env.CHANNEL_NAME) {
+    let userMsg = msg.content.match(/[^\s]+/g);
     
-    if (msg.content === '!random' || msg.content === '!r') {
+    if (userMsg[0] === '!random' || userMsg[0] === '!r') {
 
-      fetch(`https://api.giphy.com/v1/gifs/random?api_key=${GIPHYKEY}`)
-        .then(response => response.json())
-        .then(commits => msg.reply("generate img...", { files: [ commits["data"]["images"]["downsized_large"]["url"] ] }) );
+      if (userMsg[1] !== undefined) {
+
+        fetch(`${env.API_URL}/search?api_key=${env.GIPHY_KEY}&q=${userMsg[1]}`)
+          .then(response => response.json())
+          .then(commits => {
+            let postSize = commits["data"].length;
+            msg.reply(env.BOT_REPLY_MSG, { files: [ commits["data"][randomInteger(0, postSize)]["images"]["original"]["url"] ] })
+          } );
+
+      } else {
+
+        fetch(`${env.API_URL}/random?api_key=${env.GIPHY_KEY}`)
+          .then(response => response.json())
+          .then(commits => msg.reply(env.BOT_REPLY_MSG, { files: [ commits["data"]["images"]["downsized_large"]["url"] ] }) );
+
+      }
 
     }
 
@@ -25,4 +40,4 @@ client.on('message', msg => {
 
 });
 
-client.login(APIKEY);
+client.login(env.DISCORD_KEY);
