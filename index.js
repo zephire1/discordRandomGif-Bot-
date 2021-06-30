@@ -12,7 +12,7 @@ client.on('ready', () => {
 
 client.on('message', msg => {
 
-  if (msg.channel.name.include(env.CHANNEL_NAME)) {
+  if (msg.channel.name.includes(env.CHANNEL_NAME)) {
     let userMsg = msg.content.match(/[^\s]+/g);
     
     if (userMsg[0] === '!random' || userMsg[0] === '!r') {
