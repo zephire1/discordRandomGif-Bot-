@@ -34,6 +34,12 @@ client.on('message', msg => {
 
       }
 
+    } else if (userMsg[0] === '!help' && env.BOT_HELP_ENABLED) {
+
+      msg.reply(`Список моих команд:
+      -- !random, !r (Рандомная гифка)
+      -- !random mars, !r mars (Рандомная гифка на тему марса)`);
+
     }
 
   };
