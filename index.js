@@ -10,10 +10,13 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 }); 
 
+let messageCounter = 0;
 client.on('message', msg => {
 
   if (msg.channel.name.includes(env.CHANNEL_NAME)) {
     let userMsg = msg.content.match(/[^\s]+/g);
+    messageCounter++;
+    console.log(`${messageCounter}) Бот обработал сообщение!`);
     
     if (userMsg[0] === '!random' || userMsg[0] === '!r') {
 
