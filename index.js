@@ -15,7 +15,9 @@ client.on('message', msg => {
 
   if (msg.channel.name.includes(env.CHANNEL_NAME)) {
     let userMsg = msg.content.match(/[^\s]+/g);
-    
+	
+	if (userMsg === null) return false;
+
     if (userMsg[0] === '!random' || userMsg[0] === '!r') {
       messageCounter++;
       console.log(`${messageCounter}) Бот обработал сообщение!`);
